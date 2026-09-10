@@ -123,7 +123,7 @@ class GeneratorConfig {
   /// All rules are applied in order.
   final List<ReplacementRule> replacementRules;
 
-  /// Optional. Set `true` to generate validator function and prams for freezed.
+  /// Optional. Set `true` to generate validator function and prams for freezed and json_serializable.
   final bool generateValidator;
 
   /// Optional. Set `true` to use freezed v3 if jsonSerializer is freezed.

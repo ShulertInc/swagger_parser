@@ -222,6 +222,18 @@ void main() {
       );
     }, skip: true);
 
+    test('generate_validator_json_serializable', () async {
+      await e2eTest(
+        'generate_validator_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          generateValidator: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('nullable_array_reference', () async {
       await e2eTest(
         'nullable_array_reference',

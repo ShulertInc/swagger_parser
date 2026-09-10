@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:swagger_parser/src/generator/model/field_parser.dart';
 import 'package:swagger_parser/src/generator/model/programming_language.dart';
+import 'package:swagger_parser/src/generator/templates/dart_validation_template.dart';
 import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
 import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 import 'package:swagger_parser/src/utils/base_utils.dart';
@@ -13,6 +14,7 @@ String dartJsonSerializableDtoTemplate(
   required bool useMultipartFile,
   required bool includeIfNull,
   required List<FieldParser> fieldParsers,
+  bool generateValidator = false,
   bool useFlutterCompute = false,
   String? fallbackUnion,
 }) {
@@ -62,8 +64,8 @@ class $className {
   factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);
   ${_parametersInClass(dataClass.parameters, useMultipartFile, includeIfNull, actualFieldParsers)}${dataClass.parameters.isNotEmpty ? '\n' : ''}
   Map<String, Object?> toJson() => _\$${className}ToJson(this);
-}
-$serializerClass''';
+${generateValidator ? dataClass.parameters.map(dartValidationConstants).nonNulls.join() : ''}}
+${generateValidator ? dartValidateExtension(className, dataClass.parameters) : ''}$serializerClass''';
 }
 
 String _generateUnionTemplate(

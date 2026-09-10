@@ -89,6 +89,7 @@ enum ProgrammingLanguage {
                 useMultipartFile: useMultipartFile,
                 fieldParsers: fieldParsers,
                 includeIfNull: includeIfNull,
+                generateValidator: generateValidator,
                 useFlutterCompute: useFlutterCompute,
                 fallbackUnion: fallbackUnion,
               ),

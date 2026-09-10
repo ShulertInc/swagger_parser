@@ -1,0 +1,54 @@
+openapi: 3.1.0
+info:
+  title: Validation
+  version: 1.0.0
+paths:
+  /submissions:
+    post:
+      operationId: createSubmission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Submission'
+      responses:
+        '204':
+          description: Accepted
+components:
+  schemas:
+    Submission:
+      type: object
+      required:
+        - name
+        - note
+        - tags
+        - quoted
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          pattern: \S
+        note:
+          anyOf:
+            - type: string
+              maxLength: 1000
+            - type: 'null'
+        quoted:
+          type: string
+          minLength: 2
+          pattern: ^[^'"$\\]*$
+        tags:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          uniqueItems: true
+        count:
+          type: integer
+          minimum: 1
+          maximum: 10
+        startsAt:
+          type: string
+          format: date-time
+          pattern: ^2

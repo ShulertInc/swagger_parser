@@ -593,7 +593,7 @@ class SWPConfig {
   /// List of parameter names that should skip during parsing
   final List<String> skippedParameters;
 
-  /// Set `true` to generate validator for freezed.
+  /// Set `true` to generate validator for freezed and json_serializable.
   final bool generateValidator;
 
   /// Set `true` if Schema uses x-nullable to indicate nullable fields
