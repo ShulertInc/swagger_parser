@@ -30,6 +30,7 @@ final class FillController {
           enumsToJson: config.enumsToJson,
           fieldParsers: config.fieldParsers,
           unknownEnumValue: config.unknownEnumValue,
+          openEnums: config.openEnums,
           markFilesAsGenerated: config.markFilesAsGenerated,
           generateValidator: config.generateValidator,
           useFreezed3: config.useFreezed3,

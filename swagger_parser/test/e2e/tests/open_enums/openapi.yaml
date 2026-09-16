@@ -1,0 +1,70 @@
+openapi: 3.1.0
+info:
+  title: Open enums
+  version: 1.0.0
+paths:
+  /shuls:
+    get:
+      operationId: listShuls
+      parameters:
+        - name: nusachim
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Nusach'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shul'
+  /schedules:
+    post:
+      operationId: submitSchedule
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - source_kind
+              properties:
+                source_kind:
+                  $ref: '#/components/schemas/SourceKind'
+      responses:
+        '204':
+          description: Accepted
+components:
+  schemas:
+    Nusach:
+      type: string
+      enum:
+        - ashkenaz
+        - edot hamizrach
+    SourceKind:
+      type: string
+      enum:
+        - pdf
+        - external-url
+    Priority:
+      type: integer
+      enum:
+        - 1
+        - 2
+    Shul:
+      type: object
+      required:
+        - nusachim
+        - priority
+      properties:
+        nusachim:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nusach'
+        main:
+          $ref: '#/components/schemas/Nusach'
+        priority:
+          $ref: '#/components/schemas/Priority'

@@ -13,7 +13,14 @@ String dartEnumDtoTemplate(
   required bool unknownEnumValue,
   required bool markFileAsGenerated,
   required bool useFlutterCompute,
+  bool openEnums = false,
 }) {
+  if (openEnums && jsonSerializer != JsonSerializer.dartMappable) {
+    return _dartOpenEnumTemplate(
+      enumClass,
+      useFlutterCompute: useFlutterCompute,
+    );
+  }
   if (jsonSerializer == JsonSerializer.dartMappable) {
     return _dartEnumDartMappableTemplate(
       enumClass,
@@ -55,6 +62,48 @@ ${enumBodyParts.join()}
 
     return sb.toString();
   }
+}
+
+String _dartOpenEnumTemplate(
+  UniversalEnumClass enumClass, {
+  required bool useFlutterCompute,
+}) {
+  final className = enumClass.name;
+  final dartType = enumClass.type.toDartType();
+  final asyncImport = useFlutterCompute ? "import 'dart:async';\n\n" : '';
+  final implementsClause = dartType.endsWith('?') || dartType == 'dynamic'
+      ? ''
+      : ' implements $dartType';
+
+  final names = [
+    for (final item in enumClass.items)
+      (item.name.isEmpty ? 'empty' : item.name).toCamel,
+  ];
+  final constants = enumClass.items.mapIndexed((i, item) {
+    final value = _enumJsonValue(enumClass.type, protectJsonKey(item.jsonKey));
+    return '${descriptionComment(item.description, tab: '  ')}'
+        '  static const ${names[i]} = $className($value);';
+  }).join('\n');
+
+  final sb = StringBuffer('''
+$asyncImport${descriptionComment(enumClass.description)}extension type const $className($dartType json)$implementsClause {
+$constants
+
+  static const values = <$className>[${names.join(', ')}];
+
+  factory $className.fromJson($dartType json) => $className(json);
+
+  $dartType toJson() => json;
+
+  bool get isKnown => values.contains(this);
+}
+''');
+
+  if (useFlutterCompute) {
+    sb.write(_generateFlutterComputeEnumSerializer(className, enumClass));
+  }
+
+  return sb.toString();
 }
 
 String _dartEnumDartMappableTemplate(

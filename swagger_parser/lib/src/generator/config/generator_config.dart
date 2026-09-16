@@ -22,6 +22,7 @@ class GeneratorConfig {
     this.putClientsInFolder = false,
     this.enumsToJson = false,
     this.unknownEnumValue = true,
+    this.openEnums = false,
     this.markFilesAsGenerated = false,
     this.originalHttpResponse = false,
     this.replacementRules = const [],
@@ -80,6 +81,8 @@ class GeneratorConfig {
   /// DART ONLY
   /// Optional. Set `true` to maintain backwards compatibility when adding new values on the backend.
   final bool unknownEnumValue;
+
+  final bool openEnums;
 
   /// Optional. Set `false` to not put a comment at the beginning of the generated files.
   final bool markFilesAsGenerated;

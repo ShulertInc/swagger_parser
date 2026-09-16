@@ -24,6 +24,7 @@ class SWPConfig {
     this.putClientsInFolder = false,
     this.enumsToJson = false,
     this.unknownEnumValue = true,
+    this.openEnums = false,
     this.markFilesAsGenerated = true,
     this.originalHttpResponse = false,
     this.replacementRules = const [],
@@ -71,6 +72,7 @@ class SWPConfig {
     required this.putClientsInFolder,
     required this.enumsToJson,
     required this.unknownEnumValue,
+    required this.openEnums,
     required this.markFilesAsGenerated,
     required this.originalHttpResponse,
     required this.replacementRules,
@@ -213,6 +215,13 @@ class SWPConfig {
         yamlMap['enums_to_json'] as bool? ?? rootConfig?.enumsToJson;
     final unknownEnumValue =
         yamlMap['unknown_enum_value'] as bool? ?? rootConfig?.unknownEnumValue;
+    final openEnums =
+        yamlMap['open_enums'] as bool? ?? rootConfig?.openEnums;
+    if ((openEnums ?? false) && jsonSerializer == JsonSerializer.dartMappable) {
+      throw const ConfigException(
+        "Config parameter 'open_enums' is not supported with dart_mappable.",
+      );
+    }
     final markFilesAsGenerated = yamlMap['mark_files_as_generated'] as bool? ??
         rootConfig?.markFilesAsGenerated;
     final originalHttpResponse = yamlMap['original_http_response'] as bool? ??
@@ -415,6 +424,7 @@ class SWPConfig {
       putClientsInFolder: putClientsInFolder ?? dc.putClientsInFolder,
       enumsToJson: enumsToJson ?? dc.enumsToJson,
       unknownEnumValue: unknownEnumValue ?? dc.unknownEnumValue,
+      openEnums: openEnums ?? dc.openEnums,
       markFilesAsGenerated: markFilesAsGenerated ?? dc.markFilesAsGenerated,
       originalHttpResponse: originalHttpResponse ?? dc.originalHttpResponse,
       replacementRules: replacementRules ?? dc.replacementRules,
@@ -528,6 +538,8 @@ class SWPConfig {
   /// DART ONLY
   /// Optional. Set `true` to maintain backwards compatibility when adding new values on the backend.
   final bool unknownEnumValue;
+
+  final bool openEnums;
 
   /// Optional. Set `false` to not put a comment at the beginning of the generated files.
   final bool markFilesAsGenerated;
@@ -723,6 +735,7 @@ class SWPConfig {
       putClientsInFolder: putClientsInFolder,
       enumsToJson: enumsToJson,
       unknownEnumValue: unknownEnumValue,
+      openEnums: openEnums,
       markFilesAsGenerated: markFilesAsGenerated,
       originalHttpResponse: originalHttpResponse,
       replacementRules: replacementRules,

@@ -234,6 +234,19 @@ void main() {
       );
     });
 
+    test('open_enums', () async {
+      await e2eTest(
+        'open_enums',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          openEnums: true,
+          enumsParentPrefix: false,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('nullable_array_reference', () async {
       await e2eTest(
         'nullable_array_reference',

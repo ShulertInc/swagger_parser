@@ -54,6 +54,7 @@ enum ProgrammingLanguage {
     required bool useDartMappableNaming,
     required bool includeIfNull,
     required List<FieldParser> fieldParsers,
+    bool openEnums = false,
     bool useFlutterCompute = false,
     String? fallbackUnion,
   }) {
@@ -65,6 +66,7 @@ enum ProgrammingLanguage {
             jsonSerializer: jsonSerializer,
             enumsToJson: enumsToJson,
             unknownEnumValue: unknownEnumValue,
+            openEnums: openEnums,
             markFileAsGenerated: markFilesAsGenerated,
             useFlutterCompute: useFlutterCompute,
           );
