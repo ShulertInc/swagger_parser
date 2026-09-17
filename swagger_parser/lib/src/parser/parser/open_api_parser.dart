@@ -62,6 +62,8 @@ class OpenApiParser {
   static const _componentsConst = 'components';
   static const _consumesConst = 'consumes';
   static const _contentConst = 'content';
+  static const _contentEncodingConst = 'contentEncoding';
+  static const _contentMediaTypeConst = 'contentMediaType';
   static const _defaultConst = 'default';
   static const _definitionsConst = 'definitions';
   static const _descriptionConst = 'description';
@@ -1173,6 +1175,14 @@ class OpenApiParser {
     );
   }
 
+  String? _formatOf(Map<String, dynamic> map) {
+    if (map[_formatConst] case final Object format) return format.toString();
+    final rawBytes = map[_typeConst] == 'string' &&
+        map.containsKey(_contentMediaTypeConst) &&
+        !map.containsKey(_contentEncodingConst);
+    return rawBytes ? 'binary' : null;
+  }
+
   /// Traverse schema structure and call visitor for each $ref found
   void _traverseSchemaRefs(
     Map<String, dynamic> map,
@@ -2076,7 +2086,7 @@ class OpenApiParser {
           type: type,
           name: newName?.toCamel,
           description: description,
-          format: map[_formatConst]?.toString(),
+          format: _formatOf(map),
           jsonKey: name,
           defaultValue: protectDefaultValue(
             defaultValue,
