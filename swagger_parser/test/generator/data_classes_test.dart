@@ -261,6 +261,7 @@ class ClassName {
   final double floatNumberType;
   final String stringType;
   final File binaryStringType;
+  @_DateOnlyConverter()
   final DateTime dateStringType;
   final DateTime dateTimeStringType;
   final File fileType;
@@ -269,6 +270,16 @@ class ClassName {
   final Another anotherType;
 
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
+}
+
+class _DateOnlyConverter implements JsonConverter<DateTime, String> {
+  const _DateOnlyConverter();
+
+  @override
+  DateTime fromJson(String json) => DateTime.parse(json);
+
+  @override
+  String toJson(DateTime object) => object.toIso8601String().substring(0, 10);
 }
 ''';
       expect(filledContent.content, expectedContents);

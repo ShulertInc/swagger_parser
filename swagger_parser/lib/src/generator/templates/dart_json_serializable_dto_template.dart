@@ -65,8 +65,23 @@ class $className {
   ${_parametersInClass(dataClass.parameters, useMultipartFile, includeIfNull, actualFieldParsers)}${dataClass.parameters.isNotEmpty ? '\n' : ''}
   Map<String, Object?> toJson() => _\$${className}ToJson(this);
 ${generateValidator ? dataClass.parameters.map(dartValidationConstants).nonNulls.join() : ''}}
-${generateValidator ? dartValidateExtension(className, dataClass.parameters) : ''}$serializerClass''';
+${generateValidator ? dartValidateExtension(className, dataClass.parameters) : ''}${dataClass.parameters.any(_isDateOnly) ? _dateOnlyConverter : ''}$serializerClass''';
 }
+
+bool _isDateOnly(UniversalType t) => t.type == 'string' && t.format == 'date';
+
+const _dateOnlyConverter = '''
+
+class _DateOnlyConverter implements JsonConverter<DateTime, String> {
+  const _DateOnlyConverter();
+
+  @override
+  DateTime fromJson(String json) => DateTime.parse(json);
+
+  @override
+  String toJson(DateTime object) => object.toIso8601String().substring(0, 10);
+}
+''';
 
 String _generateUnionTemplate(
     UniversalComponentClass dataClass,
@@ -423,7 +438,7 @@ String _parametersInClass(
       final fieldParser =
           fieldParsers.firstWhereOrNull((f) => f.applyToType == dartType);
       return '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '  ')}'
-          '${fieldParser != null ? '\t@${fieldParser.parserName}()\n' : ''}${_jsonKey(e, includeIfNull)}  final ${_renameUnionTypes(e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${e.name};';
+          '${fieldParser != null ? '\t@${fieldParser.parserName}()\n' : ''}${_isDateOnly(e) ? '  @_DateOnlyConverter()\n' : ''}${_jsonKey(e, includeIfNull)}  final ${_renameUnionTypes(e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${e.name};';
     }).join();
 
 String _parametersInConstructor(

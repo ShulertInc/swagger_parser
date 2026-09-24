@@ -60,6 +60,17 @@ void main() {
       );
     });
 
+    test('date_only_fields', () async {
+      await e2eTest(
+        'date_only_fields',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('enum_member_names', () async {
       await e2eTest(
         'enum_member_names',
