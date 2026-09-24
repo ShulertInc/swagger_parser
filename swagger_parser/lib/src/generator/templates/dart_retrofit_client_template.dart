@@ -15,6 +15,7 @@ String dartRetrofitClientTemplate({
   required String defaultContentType,
   required bool useMultipartFile,
   required bool generateUrlsConstants,
+  bool generateErrorStatuses = false,
   bool useDartMappableNaming = false,
   bool extrasParameterByDefault = false,
   bool dioOptionsParameterByDefault = false,
@@ -65,6 +66,16 @@ abstract class $name {
     sb.write('\n');
     for (final request in restClient.requests) {
       sb.write(_openApiExtrasConst(request));
+    }
+  }
+
+  if (generateErrorStatuses && restClient.requests.isNotEmpty) {
+    sb.write('\n');
+    for (final request in restClient.requests) {
+      sb.write(
+        '  static const Set<int> ${request.name}ErrorStatuses = '
+        '{${request.errorStatuses.join(', ')}};\n',
+      );
     }
   }
 

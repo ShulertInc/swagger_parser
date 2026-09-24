@@ -47,6 +47,19 @@ void main() {
       );
     });
 
+    test('generate_error_statuses', () async {
+      await e2eTest(
+        'generate_error_statuses',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          putClientsInFolder: true,
+          generateErrorStatuses: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('enum_member_names', () async {
       await e2eTest(
         'enum_member_names',

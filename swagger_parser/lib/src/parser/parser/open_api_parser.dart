@@ -731,6 +731,11 @@ class OpenApiParser {
             parameters: parameters,
             isDeprecated:
                 requestPath[_deprecatedConst].toString().toBool() ?? false,
+            errorStatuses: requestPathResponses.keys
+                .map(int.tryParse)
+                .nonNulls
+                .where((status) => status >= 400)
+                .sorted((a, b) => a.compareTo(b)),
           );
           // we are converting the tag to the snake case
           // later tag is used to determine the file name

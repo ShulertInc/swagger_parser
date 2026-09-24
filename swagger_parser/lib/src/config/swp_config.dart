@@ -53,6 +53,7 @@ class SWPConfig {
     this.inferRequiredFromNullable = false,
     this.useFlutterCompute = false,
     this.generateUrlsConstants = false,
+    this.generateErrorStatuses = false,
     this.fieldParsers = const [],
     this.preserveSchemaCasing = false,
   });
@@ -100,6 +101,7 @@ class SWPConfig {
     required this.inferRequiredFromNullable,
     required this.useFlutterCompute,
     required this.generateUrlsConstants,
+    required this.generateErrorStatuses,
     required this.fieldParsers,
     required this.preserveSchemaCasing,
     this.fallbackUnion,
@@ -368,6 +370,10 @@ class SWPConfig {
     final generateUrlsConstants = yamlMap['generate_urls_constants'] as bool? ??
         rootConfig?.generateUrlsConstants;
 
+    final generateErrorStatuses =
+        yamlMap['generate_error_statuses'] as bool? ??
+            rootConfig?.generateErrorStatuses;
+
     final preserveSchemaCasing = yamlMap['preserve_schema_casing'] as bool? ??
         rootConfig?.preserveSchemaCasing;
 
@@ -447,6 +453,7 @@ class SWPConfig {
       useFlutterCompute: useFlutterCompute ?? dc.useFlutterCompute,
       includePaths: includePathsList ?? dc.includePaths,
       generateUrlsConstants: generateUrlsConstants ?? dc.generateUrlsConstants,
+      generateErrorStatuses: generateErrorStatuses ?? dc.generateErrorStatuses,
       preserveSchemaCasing: preserveSchemaCasing ?? dc.preserveSchemaCasing,
     );
   }
@@ -683,6 +690,8 @@ class SWPConfig {
   /// Optional. Set `true` to generate URL constants for all endpoints.
   final bool generateUrlsConstants;
 
+  final bool generateErrorStatuses;
+
   /// {@template field_parsers}
   /// DART ONLY
   /// Optional. Set field parsers.
@@ -749,6 +758,7 @@ class SWPConfig {
       includeIfNull: includeIfNull,
       useFlutterCompute: useFlutterCompute,
       generateUrlsConstants: generateUrlsConstants,
+      generateErrorStatuses: generateErrorStatuses,
       fieldParsers: fieldParsers,
     );
   }

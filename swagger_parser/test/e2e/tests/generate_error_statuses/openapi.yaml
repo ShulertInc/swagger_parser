@@ -1,0 +1,71 @@
+openapi: 3.1.0
+info:
+  title: Test API for generateErrorStatuses
+  version: 1.0.0
+paths:
+  /shuls/{id}:
+    get:
+      operationId: get_shul
+      tags: [shuls]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shul"
+        "301":
+          description: Merged into another shul
+        "429":
+          description: Rate limited
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: No such shul
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: delete_shul
+      tags: [shuls]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted
+  /status:
+    get:
+      operationId: status
+      tags: [status]
+      responses:
+        "200":
+          description: Up
+        "503":
+          description: Down
+components:
+  schemas:
+    Shul:
+      type: object
+      required: [id]
+      properties:
+        id:
+          type: string
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string

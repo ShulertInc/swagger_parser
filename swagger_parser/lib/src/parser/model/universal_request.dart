@@ -19,6 +19,7 @@ final class UniversalRequest {
     this.contentType = 'application/json',
     this.description,
     this.isDeprecated = false,
+    this.errorStatuses = const [],
   });
 
   /// Request name
@@ -61,6 +62,8 @@ final class UniversalRequest {
   /// Value indicating whether this request is deprecated
   final bool isDeprecated;
 
+  final List<int> errorStatuses;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -76,7 +79,8 @@ final class UniversalRequest {
           externalDocsUrl == other.externalDocsUrl &&
           const DeepCollectionEquality().equals(parameters, other.parameters) &&
           isMultiPart == other.isMultiPart &&
-          isFormUrlEncoded == other.isFormUrlEncoded;
+          isFormUrlEncoded == other.isFormUrlEncoded &&
+          const ListEquality<int>().equals(errorStatuses, other.errorStatuses);
 
   @override
   int get hashCode =>
@@ -90,7 +94,8 @@ final class UniversalRequest {
       contentType.hashCode ^
       parameters.hashCode ^
       isMultiPart.hashCode ^
-      isFormUrlEncoded.hashCode;
+      isFormUrlEncoded.hashCode ^
+      const ListEquality<int>().hash(errorStatuses);
 
   @override
   String toString() => 'UniversalRequest(name: $name, '
