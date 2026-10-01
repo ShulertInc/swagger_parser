@@ -16,6 +16,7 @@ class ParserConfig {
     this.replacementRulesForRawSchema = const [],
     this.useXNullable = false,
     this.excludeTags = const <String>[],
+    this.keepSchemas = const <String>[],
     this.includeTags = const <String>[],
     this.includePaths,
     this.fallbackClient = 'fallback',
@@ -78,6 +79,8 @@ class ParserConfig {
 
   ///{@macro include_paths}
   final List<String>? includePaths;
+
+  final List<String> keepSchemas;
 
   /// DART ONLY
   /// Optional. Fallback client name for endpoints without tags.

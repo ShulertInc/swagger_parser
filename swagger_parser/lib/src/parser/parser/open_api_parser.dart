@@ -1260,9 +1260,10 @@ class OpenApiParser {
 
   /// Resolve all transitive dependencies for used schemas
   Set<String> _resolveAllDependencies() {
-    final allUsedSchemas = <String>{..._usedSchemas};
+    final seeds = {..._usedSchemas, ...config.keepSchemas};
+    final allUsedSchemas = <String>{...seeds};
     final visited = <String>{};
-    final toVisit = <String>[..._usedSchemas];
+    final toVisit = <String>[...seeds];
 
     // Breadth-first search to find all dependencies
     while (toVisit.isNotEmpty) {

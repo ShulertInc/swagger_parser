@@ -45,6 +45,7 @@ class SWPConfig {
     this.dartMappableConvenientWhen = false,
     this.useDartMappableNaming = false,
     this.excludeTags = const <String>[],
+    this.keepSchemas = const <String>[],
     this.includeTags = const <String>[],
     this.includePaths,
     this.fallbackClient = 'fallback',
@@ -91,6 +92,7 @@ class SWPConfig {
     required this.useFreezed3,
     required this.useMultipartFile,
     required this.excludeTags,
+    required this.keepSchemas,
     required this.includeTags,
     required this.includePaths,
     required this.fallbackClient,
@@ -319,6 +321,22 @@ class SWPConfig {
       excludedTags = List.from(rootConfig!.excludeTags);
     }
 
+    final keepSchemasYaml = yamlMap['keep_schemas'] as YamlList?;
+    List<String>? keepSchemas;
+    if (keepSchemasYaml != null) {
+      keepSchemas = [];
+      for (final s in keepSchemasYaml) {
+        if (s is! String) {
+          throw const ConfigException(
+            "Config parameter 'keep_schemas' values must be List of String.",
+          );
+        }
+        keepSchemas.add(s);
+      }
+    } else if (rootConfig?.keepSchemas != null) {
+      keepSchemas = List.from(rootConfig!.keepSchemas);
+    }
+
     final includedTagsYaml = yamlMap['include_tags'] as YamlList?;
     List<String>? includedTags;
     if (includedTagsYaml != null) {
@@ -442,6 +460,7 @@ class SWPConfig {
       useMultipartFile: useMultipartFile ?? dc.useMultipartFile,
       fallbackUnion: fallbackUnion,
       excludeTags: excludedTags ?? dc.excludeTags,
+      keepSchemas: keepSchemas ?? dc.keepSchemas,
       includeTags: includedTags ?? dc.includeTags,
       fallbackClient: fallbackClient ?? dc.fallbackClient,
       mergeOutputs: mergeOutputs ?? dc.mergeOutputs,
@@ -642,6 +661,8 @@ class SWPConfig {
   /// Endpoints with these tags will not be included in the generated clients.
   final List<String> excludeTags;
 
+  final List<String> keepSchemas;
+
   /// {@template include_paths}
   /// Optional. Set included paths.
   ///
@@ -780,6 +801,7 @@ class SWPConfig {
       replacementRules: replacementRules,
       useXNullable: useXNullable,
       excludeTags: excludeTags,
+      keepSchemas: keepSchemas,
       replacementRulesForRawSchema: replacementRulesForRawSchema,
       includeTags: includeTags,
       includePaths: includePaths,

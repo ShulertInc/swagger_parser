@@ -170,6 +170,12 @@ swagger_parser:
     - "/some/wildcard/*/path"
     - "/another/wildcard/**"
 
+  # Optional. Set schemas to generate even when no included endpoint uses them.
+  #
+  # Their dependencies are generated too.
+  keep_schemas:
+    - "SomeSchema"
+
   # Optional (dart & json_serializable only). Set field parsers for JSON serializable.
   #
   # Field parsers are used to parse specific fields of a DTO.
