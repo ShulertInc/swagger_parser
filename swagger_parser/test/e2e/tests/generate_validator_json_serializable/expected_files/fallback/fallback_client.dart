@@ -13,8 +13,18 @@ part 'fallback_client.g.dart';
 abstract class FallbackClient {
   factory FallbackClient(Dio dio, {String? baseUrl}) = _FallbackClient;
 
+  static const int searchSubmissionsQMaxLength = 200;
+  static const int searchSubmissionsXDeviceIdMaxLength = 64;
+
   @POST('/submissions')
   Future<void> createSubmission({
     @Body() required Submission body,
+  });
+
+  @GET('/submissions')
+  Future<void> searchSubmissions({
+    @Query('q') required String q,
+    @Header('X-Device-Id') String? xDeviceId,
+    @Query('page') int? page,
   });
 }

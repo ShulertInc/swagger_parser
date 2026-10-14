@@ -128,6 +128,7 @@ enum ProgrammingLanguage {
     required bool useMultipartFile,
     required bool generateUrlsConstants,
     bool generateErrorStatuses = false,
+    bool generateValidator = false,
     bool useDartMappableNaming = false,
     bool extrasParameterByDefault = false,
     bool dioOptionsParameterByDefault = false,
@@ -139,6 +140,7 @@ enum ProgrammingLanguage {
   }) =>
       switch (this) {
         dart => dartRetrofitClientTemplate(
+            generateValidator: generateValidator,
             restClient: restClient,
             name: name,
             defaultContentType: defaultContentType,

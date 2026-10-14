@@ -1,4 +1,5 @@
 import 'package:swagger_parser/src/generator/model/programming_language.dart';
+import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
 import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 import 'package:swagger_parser/src/utils/type_utils.dart';
 
@@ -44,8 +45,33 @@ String? dartValidationConstants(UniversalType type) {
     );
   }
 
+  final format = type.format;
+  if (type.type == 'string' &&
+      format != null &&
+      !_formatsWithDartTypes.contains(format)) {
+    sb.write(
+      '  static const String ${type.name}Format = ${_dartString(format)};\n',
+    );
+  }
+
   return sb.isEmpty ? null : sb.toString();
 }
+
+const _formatsWithDartTypes = {'date', 'date-time', 'binary', 'byte'};
+
+String dartParameterValidationConstants(UniversalRequest request) =>
+    request.parameters
+        .where((parameter) => parameter.parameterType != HttpParameterType.body)
+        .map(
+          (parameter) => dartValidationConstants(
+            parameter.type.copyWith(
+              name: request.name +
+                  (parameter.type.name ?? parameter.name ?? '').toPascal,
+            ),
+          ),
+        )
+        .nonNulls
+        .join();
 
 String dartValidateExtension(String className, Set<UniversalType> types) {
   final conditions = <String>[];

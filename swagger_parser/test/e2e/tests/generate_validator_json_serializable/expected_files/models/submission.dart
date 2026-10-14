@@ -15,6 +15,8 @@ class Submission {
     required this.tags,
     this.count,
     this.startsAt,
+    this.email,
+    this.website,
   });
 
   factory Submission.fromJson(Map<String, Object?> json) =>
@@ -26,6 +28,8 @@ class Submission {
   final List<String> tags;
   final int? count;
   final DateTime? startsAt;
+  final String? email;
+  final String? website;
 
   Map<String, Object?> toJson() => _$SubmissionToJson(this);
   static const int nameMaxLength = 255;
@@ -38,6 +42,9 @@ class Submission {
   static const int countMin = 1;
   static const int countMax = 10;
   static const String startsAtPattern = '^2';
+  static const int emailMaxLength = 254;
+  static const String emailFormat = 'email';
+  static const String websiteFormat = 'website';
 }
 
 extension SubmissionValidationX on Submission {
@@ -100,6 +107,13 @@ extension SubmissionValidationX on Submission {
     }
     try {
       if (count != null && count! > Submission.countMax) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (email != null && email!.runes.length > Submission.emailMaxLength) {
         return false;
       }
     } catch (e) {

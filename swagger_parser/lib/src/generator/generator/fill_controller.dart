@@ -103,6 +103,7 @@ final class FillController {
         jsonSerializer: config.jsonSerializer,
         generateUrlsConstants: config.generateUrlsConstants,
         generateErrorStatuses: config.generateErrorStatuses,
+        generateValidator: config.generateValidator,
         useDartMappableNaming: config.useDartMappableNaming,
       ),
     );

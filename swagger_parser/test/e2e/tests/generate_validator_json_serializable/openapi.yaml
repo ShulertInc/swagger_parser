@@ -15,6 +15,31 @@ paths:
       responses:
         '204':
           description: Accepted
+    get:
+      operationId: searchSubmissions
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 200
+        - name: X-Device-Id
+          in: header
+          required: false
+          schema:
+            anyOf:
+              - type: string
+                maxLength: 64
+              - type: 'null'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Found
 components:
   schemas:
     Submission:
@@ -52,3 +77,12 @@ components:
           type: string
           format: date-time
           pattern: ^2
+        email:
+          anyOf:
+            - type: string
+              format: email
+              maxLength: 254
+            - type: 'null'
+        website:
+          type: string
+          format: website

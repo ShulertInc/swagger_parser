@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:swagger_parser/src/generator/model/json_serializer.dart';
 import 'package:swagger_parser/src/generator/model/programming_language.dart';
+import 'package:swagger_parser/src/generator/templates/dart_validation_template.dart';
 import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
 import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 import 'package:swagger_parser/src/utils/base_utils.dart';
@@ -16,6 +17,7 @@ String dartRetrofitClientTemplate({
   required bool useMultipartFile,
   required bool generateUrlsConstants,
   bool generateErrorStatuses = false,
+  bool generateValidator = false,
   bool useDartMappableNaming = false,
   bool extrasParameterByDefault = false,
   bool dioOptionsParameterByDefault = false,
@@ -76,6 +78,14 @@ abstract class $name {
         '  static const Set<int> ${request.name}ErrorStatuses = '
         '{${request.errorStatuses.join(', ')}};\n',
       );
+    }
+  }
+
+  if (generateValidator) {
+    final constants =
+        restClient.requests.map(dartParameterValidationConstants).join();
+    if (constants.isNotEmpty) {
+      sb.write('\n$constants');
     }
   }
 
